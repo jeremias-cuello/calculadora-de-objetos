@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Matriz</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <header class="header">
+        <h1 class="header__title">Matriz</h1>
+    </header>
+    <div class="accions">
+        <div class="group">
+            <h2 class="group__title">Matriz</h2>
+            <div class="control">
+                <input class="control__input" id="inpName"  placeholder="Nombre (MxA, mtzDet)" type="text">
+                <span>
+                    <input class="control__input" id="inpRows" placeholder="Filas" type="number" min="1">
+                    <input class="control__input" id="inpColumns" placeholder="Columnas" type="number" min="1">
+                </span>
+                <button class="control__button" id="btnSave" type="button">Guardar</button>
+            </div>
+        </div>
+        <div class="group">
+            <h2 class="group__title">Suma</h2>
+            <div class="control">
+                <select class="control__select" id="">
+                    <option value="0">Seleccione Matrices</option>
+                    <option value="Mx0">MxPrimera</option>
+                    <option value="Mx1">MxA</option>
+                    <option value="Mx3">MxC</option>
+                    <option value="Mx4">MxD</option>
+                    <option value="Mx5">MxE</option>
+                    <option value="Mx6">MxF</option>
+                    <option value="Mx8">MxH</option>
+                    <option value="Mx9">MxI</option>
+                    <option value="Mx10">MxI</option>
+                </select>
+                <ul class="listMxsOperation">
+                    <li class="listMxsOperation__item" id="Mx7">MxG<button class="listMxsOperation__button-quit">X</button></li>
+                    <hr class="line">
+                    <li class="listMxsOperation__item" id="Mx2">MxB<button class="listMxsOperation__button-quit">X</button></li>
+                </ul>
+                <button class="control__button" id="btnSum" type="button">Sumar</button>
+            </div>
+        </div>
+        <div class="group">
+            <h2 class="group__title">Resta</h2>
+            <div class="control">
+                <select class="control__select" id="">
+                    <option value="0">Seleccione Matrices</option>
+                    <option value="Mx0">MxPrimera</option>
+                    <option value="Mx1">MxA</option>
+                    <option value="Mx3">MxC</option>
+                    <option value="Mx4">MxD</option>
+                    <option value="Mx5">MxE</option>
+                    <option value="Mx6">MxF</option>
+                    <option value="Mx8">MxH</option>
+                    <option value="Mx9">MxI</option>
+                    <option value="Mx10">MxI</option>
+                </select>
+                <ul class="listMxsOperation">
+                    <li class="listMxsOperation__item" id="Mx7">MxG<button class="listMxsOperation__button-quit">X</button></li>
+                    <hr class="line">
+                    <li class="listMxsOperation__item" id="Mx2">MxB<button class="listMxsOperation__button-quit">X</button></li>
+                </ul>
+                <button class="control__button" id="btnSubstraction" type="button">Restar</button>
+            </div>
+        </div>
+        <div class="group">
+            <h2 class="group__title">Determinante</h2>
+            <div class="control">
+                <label class="control__label" for="InpMxSelected-determinant">Matriz Seleccionada</label>
+                <input class="control__input" id="InpMxSelected-determinant" type="text" value="" placeholder="No hay Matriz Seleccionada" readonly>
+                <label class="control__label" for="InpDeterminantResult">Determinante</label>
+                <input class="control__input" id="InpDeterminantResult" type="number" value="42" readonly>
+                <button class="control__button" id="btnDeterminant" type="button">Calcular Determinante</button>
+            </div>
+        </div>
+        <div class="group">
+            <h2 class="group__title">Cuadrado Mágico</h2>
+            <div class="control">
+                <label class="control__label" for="InpMxSelected-magicSquare">Matriz Seleccionada</label>
+                <input class="control__input" id="InpMxSelected-magicSquare" type="text" value="" placeholder="No hay Matriz Seleccionada" readonly>
+                <label class="control__label" id="lblMsjDeterminant"></label>
+                <button class="control__button" id="btnDeterminant" type="button" disabled="true">Completar</button>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="contrlMxs">
+            <div class="listMxs">
+                <div class="listMxs__item" id="Mx10">EJ(i=10)NoEnLista</div>
+            </div>
+            <button class="control__button" id="SaveValues" disabled="true">Guardar Valores</button>
+        </div>
+        <div class="displayMx">
+            <h2 class="displayMx__title">MxA</h2>
+            <div class="matrix">
+                <input class="celda" value="53" type="number"/>
+                <input class="celda" value="64" type="number"/>
+                <input class="celda" value="89" type="number"/>
+                <input class="celda" value="21" type="number"/>
+                <input class="celda" value="51" type="number"/>
+                <input class="celda" value="23" type="number"/>
+                <input class="celda" value="5224" type="number"/>
+                <input class="celda" value="29" type="number"/>
+                <input class="celda" value="75" type="number"/>
+                <input class="celda" value="53" type="number"/>
+                <input class="celda" value="64" type="number"/>
+                <input class="celda" value="89" type="number"/>
+                <input class="celda" value="21" type="number"/>
+                <input class="celda" value="51" type="number"/>
+                <input class="celda" value="23" type="number"/>
+                <input class="celda" value="5224" type="number"/>
+                <input class="celda" value="29" type="number"/>
+                <input class="celda" value="75" type="number"/>
+                <input class="celda" value="53" type="number"/>
+                <input class="celda" value="64" type="number"/>
+                <input class="celda" value="89" type="number"/>
+                <input class="celda" value="21" type="number"/>
+                <input class="celda" value="51" type="number"/>
+                <input class="celda" value="23" type="number"/>
+                <input class="celda" value="53" type="number"/>
+                <input class="celda" value="64" type="number"/>
+                <input class="celda" value="89" type="number"/>
+                <input class="celda" value="21" type="number"/>
+                <input class="celda" value="51" type="number"/>
+                <input class="celda" value="23" type="number"/>
+                <input class="celda" value="5224" type="number"/>
+                <input class="celda" value="29" type="number"/>
+                <input class="celda" value="75" type="number"/>
+                <input class="celda" value="53" type="number"/>
+                <input class="celda" value="64" type="number"/>
+                <input class="celda" value="89" type="number"/>
+                <input class="celda" value="21" type="number"/>
+                <input class="celda" value="51" type="number"/>
+                <input class="celda" value="23" type="number"/>
+                <input class="celda" value="5224" type="number"/>
+                <input class="celda" value="29" type="number"/>
+                <input class="celda" value="75" type="number"/>
+                <input class="celda" value="53" type="number"/>
+                <input class="celda" value="64" type="number"/>
+                <input class="celda" value="89" type="number"/>
+                <input class="celda" value="21" type="number"/>
+                <input class="celda" value="51" type="number"/>
+                <input class="celda" value="23" type="number"/>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <strong>Copyright 2023 | Objetos | Arquitectura MVC</strong>
+    </footer>
+</body>
+</html>
+<script type="module" src="../../controllers/matrix.controllers.js"></script>
