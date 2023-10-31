@@ -18,6 +18,7 @@
                     <input class="control__input" id="inpRows" placeholder="Filas" type="number" min="1">
                     <input class="control__input" id="inpColumns" placeholder="Columnas" type="number" min="1">
                 </span>
+                <label class="control__label" id="lbl"></label>
                 <button class="control__button" id="btnSave" type="button">Guardar</button>
             </div>
         </div>
@@ -70,18 +71,18 @@
         <div class="group">
             <h2 class="group__title">Determinante</h2>
             <div class="control">
-                <label class="control__label" for="InpMxSelected-determinant">Matriz Seleccionada</label>
-                <input class="control__input" id="InpMxSelected-determinant" type="text" value="" placeholder="No hay Matriz Seleccionada" readonly>
-                <label class="control__label" for="InpDeterminantResult">Determinante</label>
-                <input class="control__input" id="InpDeterminantResult" type="number" value="42" readonly>
+                <label class="control__label" for="inpMxSelected-determinant">Matriz Seleccionada</label>
+                <input class="control__input" id="inpMxSelected-determinant" type="text" placeholder="No hay Matriz Seleccionada" readonly>
+                <label class="control__label" for="inpDeterminantResult">Determinante</label>
+                <input class="control__input" id="inpDeterminantResult" type="number" value="42" readonly>
                 <button class="control__button" id="btnDeterminant" type="button">Calcular Determinante</button>
             </div>
         </div>
         <div class="group">
             <h2 class="group__title">Cuadrado Mágico</h2>
             <div class="control">
-                <label class="control__label" for="InpMxSelected-magicSquare">Matriz Seleccionada</label>
-                <input class="control__input" id="InpMxSelected-magicSquare" type="text" value="" placeholder="No hay Matriz Seleccionada" readonly>
+                <label class="control__label" for="inpMxSelected-magicSquare">Matriz Seleccionada</label>
+                <input class="control__input" id="inpMxSelected-magicSquare" type="text" value="" placeholder="No hay Matriz Seleccionada" readonly>
                 <label class="control__label" id="lblMsjDeterminant"></label>
                 <button class="control__button" id="btnDeterminant" type="button" disabled="true">Completar</button>
             </div>
@@ -95,8 +96,8 @@
             <button class="control__button" id="SaveValues" disabled="true">Guardar Valores</button>
         </div>
         <div class="displayMx">
-            <h2 class="displayMx__title">MxA</h2>
-            <div class="matrix">
+            <h2 class="displayMx__title">Seleccione una Matriz</h2>
+            <div class="matrix hidden">
                 <input class="celda" value="53" type="number"/>
                 <input class="celda" value="64" type="number"/>
                 <input class="celda" value="89" type="number"/>

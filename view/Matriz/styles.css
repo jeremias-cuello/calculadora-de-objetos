@@ -270,6 +270,10 @@ body{
     gap: 20px;
 }
 
+.hidden{
+    display: none;
+}
+
 .displayMx__title{
     font-family: 'Courier New', Courier, monospace;
     color: black;
