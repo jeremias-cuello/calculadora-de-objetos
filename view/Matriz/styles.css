@@ -38,6 +38,7 @@ body{
     align-items: center;
     justify-content: flex-start;
     height: 350px;
+    width: 160px;
     overflow: auto;
     padding: 5px;
 
@@ -66,14 +67,19 @@ body{
 }
 
 .listMxs__item{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+
     font-family: 'Courier New', Courier, monospace;
     border: solid rgb(1, 1, 107) 1px;
     border-radius: 10px 10px 0px 0px;
     margin: 5px 5px;
-    padding: 10px 5px;
-    width: 100px;
+    padding: 15px 5px;
+    width: 120px;
     background-color: rgb(60, 112, 255);
-    overflow: auto;
+    overflow-y: hidden;
 }
 
 .listMxs__item:hover{
@@ -230,25 +236,25 @@ body{
     padding: 5px 0px;
 }
 
-.listMxsOperation__button-quit{
+.listMxs__button-quit{
+    width: 20px;
+    padding: 5px;
     border: solid rgb(255, 39, 39) 1px;
     background-color: rgb(255, 80, 80);
     color: black;
     font-size: 10px;
-    padding: 2px;
     border-radius: 5px;
     text-align: center;
-    width: 20px;
     font-weight: bold;
     outline: none;
 }
 
-.listMxsOperation__button-quit:hover{
+.listMxs__button-quit:hover{
     background-color: rgb(255, 159, 159);
     cursor: pointer;
 }
 
-.listMxsOperation__button-quit:focus{
+.listMxs__button-quit:focus{
     background-color: red;
 }
 

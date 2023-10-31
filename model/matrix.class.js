@@ -87,7 +87,7 @@ class Matrix {
 
     static _list = [];
 
-    static find(){
+    static get list(){
         return this._list;
     }
     static find(searchName){
@@ -109,12 +109,15 @@ class Matrix {
     static add(mxNew){
         this._list.push(mxNew);
     }
-    static update(mxUpdate){
-        const index = this._list.indexOf(mxUpdate);
-        _list[index].name = mxUpdate.name;
-        _list[index].rows = mxUpdate.rows;
-        _list[index].columns = mxUpdate.columns;
-        _list[index].mx = mxUpdate.mx;
+    static delete(indexMx){
+        this._list.splice(indexMx, 1);
+    }
+
+    static update(indexMx){
+        _list[indexMx].name = mxUpdate.name;
+        _list[indexMx].rows = mxUpdate.rows;
+        _list[indexMx].columns = mxUpdate.columns;
+        _list[indexMx].mx = mxUpdate.mx;
     }
 }
 
