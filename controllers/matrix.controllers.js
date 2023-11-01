@@ -2,6 +2,8 @@ import { Matrix } from "../model/matrix.class.js";
 
 let selectedMx = false;
 
+//#region devTools
+
 // autoCompletar valores para hagilizar desarrollo
 document.addEventListener('DOMContentLoaded', () => {
     inpRows.value = 3;
@@ -30,6 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
     btnSave.click();
 })
 
+//#endregion
+
 //#region constants
 
 // Matrix
@@ -42,12 +46,15 @@ const btnSave = document.querySelector('#btnSave');
 // Display Matriz
 const divListMatrices = document.querySelector('.listMxs');
 const lblDisMx = document.querySelector('#lblDisplayMx');
+let changed = false;
+const btnSaveValues = document.querySelector('#saveValues');
 const mxDisMx = {
     elm: document.querySelector('#vlvDisplayMx'),
     fill({ mx, rows, columns }){
         let sizeHTML = this.elm.children.length;
         const sizeNew = mx.length * mx[0].length;
 
+        // agregar o sacar celdas
         if (sizeHTML > sizeNew) {
             while(this.elm.children.length != sizeNew){
                 this.elm.removeChild(this.elm.lastChild);
@@ -56,12 +63,14 @@ const mxDisMx = {
             while (sizeHTML != sizeNew) {
                 const inp = document.createElement('input');
                 inp.classList.add('celda');
+                inp.addEventListener('change', changeCells)
                 inp.type = 'number';
                 this.elm.appendChild(inp);
                 sizeHTML++;
             }
         }
 
+        // setear valores de celdas
         const inputs = this.elm.children;
         for (let i = 0; i < rows; i++) {
             for (let j = 0; j < columns; j++) {
@@ -75,7 +84,7 @@ const mxDisMx = {
             this.elm.style.gridTemplateRows = `repeat(${mx.rows}, 25px)`;
             this.elm.style.gridTemplateColumns = `repeat(${mx.columns}, 25px)`;
             this.elm.classList.remove('hidden');
-            this.fill(mx)
+            this.fill(mx);
         } else this.elm.classList.add('hidden');
     }
 }
@@ -89,6 +98,12 @@ const mxSelectedSqr = document.querySelector('#inpMxSelected-magicSquare');
 //#endregion
 
 //#region Functions Aditionals
+
+const changeCells = () => {
+    changed = true;
+    btnSaveValues.classList.remove('control__button-desactivated');
+    btnSaveValues.disabled = false;
+}
 
 const selectMxInList = e => {
     let divSelected = e.target;
@@ -153,6 +168,24 @@ const loadList = () => {
 //#endregion
 
 //#region Acciones
+
+// Guardar valores
+btnSaveValues.addEventListener('click', () => {
+    if(!selectedMx) return;
+    const cellsValue = [...mxDisMx.elm.children]
+        .map(inp => inp.value.trim() !== '' ? parseFloat(inp.value) : null);
+    const mx = Matrix.list[selectedMx.id];
+
+    for (let i = 0; i < mx.rows; i++) {
+        for (let j = 0; j < mx.columns; j++) {
+            mx.mx[i][j] = cellsValue[i * mx.columns + j];
+        }
+    }
+
+    changed = false;
+    btnSaveValues.disabled = true;
+    btnSaveValues.classList.add('control__button-desactivated');
+})
 
 // Borrar
 const deleteMxOnList = e => {

@@ -170,6 +170,15 @@ body{
 .control__button:focus{
     background-color: blue;
 }
+.control__button-desactivated{
+    cursor: default;
+    background-color: #9fb9ff;
+}
+.control__button-desactivated:hover{
+    cursor: default;
+    background-color: #9fb9ff;
+
+}
 
 #inpRows, #inpColumns{
     width: 75px;
