@@ -105,6 +105,11 @@ body{
     background-color: rgb(0, 28, 184);
 }
 
+.listMxs__item-selected:hover{
+    background-color: rgb(0, 28, 184);
+    cursor: default;
+}
+
 .control__input, .control__select{
     border: solid black 1px;
     border-radius: 5px;
@@ -272,7 +277,7 @@ body{
 .displayMx{
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 20px;
 }
 

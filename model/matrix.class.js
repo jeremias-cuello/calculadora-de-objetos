@@ -14,12 +14,12 @@ class Matrix {
             this._rows = rowsParam;
             this._columns = columnsParam;
             this.name = nameParam;
-            this.mx = [[]];
+            this.mx = Array.from({length: this.rows}, () => Array.from({length: this.columns}).fill(null));
         }
         else {
             this._rows = 1;
             this._columns = 1;
-            this.mx = [[]];
+            this.mx = Array.from({length: this.rows}, () => Array.from({length: this.columns}).fill(null));
         }
     }
 
