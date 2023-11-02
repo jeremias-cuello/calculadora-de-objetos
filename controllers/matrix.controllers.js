@@ -4,32 +4,27 @@ let selectedMx = false;
 
 //#region devTools
 
+const loadMxs = () => {
+    const mxs = [
+        [3, 4, 'MxA'],
+        [5, 3, 'MxB'],
+        [2, 2, 'MxD'],
+        [3, 4, 'MxE'],
+        [7, 3, 'MxF'],
+        [4, 3, 'MxG']
+    ];
+
+    mxs.forEach(mx => {
+        inpRows.value = mx[0];
+        inpColumns.value = mx[1];
+        inpName.value = mx[2];
+        btnSave.click();
+    });
+};
+
 // autoCompletar valores para hagilizar desarrollo
 document.addEventListener('DOMContentLoaded', () => {
-    inpRows.value = 3;
-    inpColumns.value = 4;
-    inpName.value = 'MxA';
-    btnSave.click();
-    inpRows.value = 5;
-    inpColumns.value = 3;
-    inpName.value = 'MxB';
-    btnSave.click();
-    inpRows.value = 2;
-    inpColumns.value = 2;
-    inpName.value = 'MxD';
-    btnSave.click();
-    inpRows.value = 3;
-    inpColumns.value = 4;
-    inpName.value = 'MxE';
-    btnSave.click();
-    inpRows.value = 7;
-    inpColumns.value = 3;
-    inpName.value = 'MxF';
-    btnSave.click();
-    inpRows.value = 4;
-    inpColumns.value = 3;
-    inpName.value = 'MxG';
-    btnSave.click();
+    loadMxs();
 })
 
 //#endregion
@@ -46,7 +41,6 @@ const btnSave = document.querySelector('#btnSave');
 // Display Matriz
 const divListMatrices = document.querySelector('.listMxs');
 const lblDisMx = document.querySelector('#lblDisplayMx');
-let changed = false;
 const btnSaveValues = document.querySelector('#saveValues');
 const mxDisMx = {
     elm: document.querySelector('#vlvDisplayMx'),
@@ -90,12 +84,12 @@ const mxDisMx = {
 }
 
 // Suma
-const listMxSuma = document.querySelector('#listMxsOperatonSuma');
-const listSelectedSuma = document.querySelector('#listMxSelectedSuma');
+const selectListMxSuma = document.querySelector('#listMxsOperatonSuma');
+const ulListMxSelectedSuma = document.querySelector('#listMxSelectedSuma');
 
 // Resta
-const listMxResta = document.querySelector('#listMxsOperatonResta');
-const listSelectedResta = document.querySelector('#listMxSelectedResta');
+const selectListMxResta = document.querySelector('#listMxsOperatonResta');
+const ulListMxSelectedResta = document.querySelector('#listMxSelectedResta');
 
 // Determinante
 const mxSelectedDet = document.querySelector('#inpMxSelected-determinant');
@@ -105,23 +99,50 @@ const mxSelectedSqr = document.querySelector('#inpMxSelected-magicSquare');
 
 //#endregion
 
-//#region Functions Aditionals
+//#region UI Functions
+
+const removeMxListOperation = e => {
+    const index = e.target.id.replace('quitMxSelected', '');
+    const li = e.target.parentNode;
+    const ul = li.parentNode;
+    const operation = e.target.parentNode.id.includes('Suma'); // true: suma ; false: resta
+    const name = li.childNodes[0].textContent;
+
+    if(ul.firstChild === li && ul.children.length > 1)
+        ul.removeChild(li.nextSibling);
+    if(ul.children.length > 1 && ul.firstChild !== li){
+        ul.removeChild(li.previousSibling);
+    }
+    ul.removeChild(li);
+    if(ul.children.length === 0){
+        ul.classList.add('hidden');
+    }
+
+    const option = document.createElement('option');
+        option.value = index;
+        option.innerText = name;
+
+    if(operation) selectListMxSuma.appendChild(option);
+    else selectListMxResta.appendChild(option);
+}
 
 const selectItemOperation = e => {
     const select = e.target;
     const indexMx = select.value;
     const itemSelected = select.options[select.selectedIndex];
-    select.removeChild(itemSelected);
+    const operation = e.target.id.includes('Suma') ? 'Suma' : 'Resta';
 
+    select.removeChild(itemSelected);
     const listMx = select.parentNode.children[1];
     listMx.classList.remove('hidden');
     const button = document.createElement('button');
         button.classList.add('listMxs__button-quit');
-        button.id = indexMx;
+        button.id = `quitMxSelected${indexMx}`;
         button.innerText = 'X';
+        button.addEventListener('click', removeMxListOperation);
     const li = document.createElement('li');
         li.classList.add('listMxsOperation__item');
-        li.id = indexMx;
+        li.id = `mxOperation${operation}${indexMx}`;
         li.innerText = itemSelected.innerText;
         li.appendChild(button);
 
@@ -136,7 +157,6 @@ const selectItemOperation = e => {
 }
 
 const changeCells = () => {
-    changed = true;
     btnSaveValues.classList.remove('control__button-desactivated');
     btnSaveValues.disabled = false;
 }
@@ -179,25 +199,25 @@ const isValidated = (rows, columns, name) => {
 const loadList = () => {
 
     // borra todas las matrices de las listas
-    while (divListMatrices.firstChild || listMxResta.firstChild || listMxSuma.firstChild || listSelectedSuma.firstChild || listSelectedResta.firstChild){
-        if(listSelectedSuma.firstChild) listSelectedSuma.removeChild(listSelectedSuma.firstChild);
-        if(listSelectedResta.firstChild) listSelectedResta.removeChild(listSelectedResta.firstChild);
+    while (divListMatrices.firstChild || selectListMxResta.firstChild || selectListMxSuma.firstChild || ulListMxSelectedSuma.firstChild || ulListMxSelectedResta.firstChild){
+        if(ulListMxSelectedSuma.firstChild) ulListMxSelectedSuma.removeChild(ulListMxSelectedSuma.firstChild);
+        if(ulListMxSelectedResta.firstChild) ulListMxSelectedResta.removeChild(ulListMxSelectedResta.firstChild);
         if(divListMatrices.firstChild) divListMatrices.removeChild(divListMatrices.firstChild);
-        if(listMxResta.firstChild) listMxResta.removeChild(listMxResta.firstChild);
-        if(listMxSuma.firstChild) listMxSuma.removeChild(listMxSuma.firstChild);
+        if(selectListMxResta.firstChild) selectListMxResta.removeChild(selectListMxResta.firstChild);
+        if(selectListMxSuma.firstChild) selectListMxSuma.removeChild(selectListMxSuma.firstChild);
     }
 
-    listSelectedSuma.classList.add('hidden');
-    listSelectedResta.classList.add('hidden');
+    ulListMxSelectedSuma.classList.add('hidden');
+    ulListMxSelectedResta.classList.add('hidden');
 
     let option = document.createElement('option');
         option.value = -1;
         option.innerText = 'Seleccione Matrices';
-    listMxSuma.appendChild(option);
+    selectListMxSuma.appendChild(option);
     option = document.createElement('option');
         option.value = -1;
         option.innerText = 'Seleccione Matrices';
-    listMxResta.appendChild(option);
+    selectListMxResta.appendChild(option);
 
     // carga todas las matrices desde lista nueva o modificada
     Matrix.list.forEach( (mx, index) => {
@@ -224,11 +244,11 @@ const loadList = () => {
         option = document.createElement('option');
             option.value = index;
             option.innerText = mx.name;
-        listMxResta.appendChild(option);
+        selectListMxResta.appendChild(option);
         option = document.createElement('option');
             option.value = index;
             option.innerText = mx.name;
-        listMxSuma.appendChild(option);
+        selectListMxSuma.appendChild(option);
     });
 
     selectedMx = false;
@@ -241,14 +261,7 @@ const loadList = () => {
 
 //#region Acciones
 
-//#region SUMA
-
-listMxSuma.addEventListener('change', selectItemOperation)
-listMxResta.addEventListener('change', selectItemOperation)
-
-//#endregion
-
-// Guardar valores
+// Guardar celdas
 btnSaveValues.addEventListener('click', () => {
     if(!selectedMx) return;
     const { mx, rows, columns} = Matrix.list[selectedMx.id];
@@ -259,7 +272,6 @@ btnSaveValues.addEventListener('click', () => {
         for (let j = 0; j < columns; j++)
             mx[i][j] = cellsValue[i * columns + j];
 
-    changed = false;
     btnSaveValues.disabled = true;
     btnSaveValues.classList.add('control__button-desactivated');
 })
@@ -296,5 +308,8 @@ btnSave.addEventListener('click', () => {
     loadList();
     inpRows.value = inpColumns.value = inpName.value = '';
 })
+
+selectListMxSuma.addEventListener('change', selectItemOperation);
+selectListMxResta.addEventListener('change', selectItemOperation);
 
 //#endregion

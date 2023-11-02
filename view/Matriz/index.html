@@ -18,7 +18,7 @@
                     <input class="control__input" id="inpRows" placeholder="Filas" type="number" min="1">
                     <input class="control__input" id="inpColumns" placeholder="Columnas" type="number" min="1">
                 </span>
-                <label class="control__label" id="lblSave"></label>
+                <label class="control__label" id="lblSave" for="inpName"></label>
                 <button class="control__button" id="btnSave" type="button">Guardar</button>
             </div>
         </div>
@@ -28,9 +28,6 @@
                 <select class="control__select" id="listMxsOperatonSuma">
                 </select>
                 <ul class="listMxsOperation" id="listMxSelectedSuma">
-                    <li class="listMxsOperation__item" id="Mx7">MxG<button class="listMxs__button-quit">X</button></li>
-                    <hr class="line">
-                    <li class="listMxsOperation__item" id="Mx2">MxB<button class="listMxs__button-quit">X</button></li>
                 </ul>
                 <button class="control__button" id="btnSum" type="button">Sumar</button>
             </div>
@@ -63,7 +60,7 @@
             <div class="control">
                 <label class="control__label" for="inpMxSelected-magicSquare">Matriz Seleccionada</label>
                 <input class="control__input" id="inpMxSelected-magicSquare" type="text" value="" placeholder="No hay Matriz Seleccionada" readonly>
-                <label class="control__label" id="lblMsjDeterminant"></label>
+                <label class="control__label" id="lblMsjDeterminant" for="inpMxSelected-magicSquare"></label>
                 <button class="control__button" id="btnDeterminant" type="button" disabled="true">Completar</button>
             </div>
         </div>
