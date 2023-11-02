@@ -89,6 +89,14 @@ const mxDisMx = {
     }
 }
 
+// Suma
+const listMxSuma = document.querySelector('#listMxsOperatonSuma');
+const listSelectedSuma = document.querySelector('#listMxSelectedSuma');
+
+// Resta
+const listMxResta = document.querySelector('#listMxsOperatonResta');
+const listSelectedResta = document.querySelector('#listMxSelectedResta');
+
 // Determinante
 const mxSelectedDet = document.querySelector('#inpMxSelected-determinant');
 
@@ -98,6 +106,34 @@ const mxSelectedSqr = document.querySelector('#inpMxSelected-magicSquare');
 //#endregion
 
 //#region Functions Aditionals
+
+const selectItemOperation = e => {
+    const select = e.target;
+    const indexMx = select.value;
+    const itemSelected = select.options[select.selectedIndex];
+    select.removeChild(itemSelected);
+
+    const listMx = select.parentNode.children[1];
+    listMx.classList.remove('hidden');
+    const button = document.createElement('button');
+        button.classList.add('listMxs__button-quit');
+        button.id = indexMx;
+        button.innerText = 'X';
+    const li = document.createElement('li');
+        li.classList.add('listMxsOperation__item');
+        li.id = indexMx;
+        li.innerText = itemSelected.innerText;
+        li.appendChild(button);
+
+    if(listMx.children.length > 0){
+        const hr = document.createElement('hr');
+            hr.classList.add('line');
+        listMx.appendChild(hr);
+    }
+
+    listMx.appendChild(li);
+
+}
 
 const changeCells = () => {
     changed = true;
@@ -128,18 +164,44 @@ const selectMxInList = e => {
 
 const isValidated = (rows, columns, name) => {
     const regExpName = /^[a-zA-Z]+$/;
+    const result = rows > 0 && columns > 0 && name.match(regExpName);
 
-    return rows > 0 && columns > 0 && name.match(regExpName);
+    if(!result) return 'Campos incorrectos.';
+    if(name.length > 10) return 'Nombre muy largo.';
+
+    for (let i = 0; i < Matrix.list.length; i++)
+        if(name === Matrix.list[i].name)
+            return 'Nombre repetido.';
+
+    return false;
 };
 
 const loadList = () => {
 
-    // borra todas las matrices de la lista
-    while (divListMatrices.firstChild)
-        divListMatrices.removeChild(divListMatrices.firstChild);
+    // borra todas las matrices de las listas
+    while (divListMatrices.firstChild || listMxResta.firstChild || listMxSuma.firstChild || listSelectedSuma.firstChild || listSelectedResta.firstChild){
+        if(listSelectedSuma.firstChild) listSelectedSuma.removeChild(listSelectedSuma.firstChild);
+        if(listSelectedResta.firstChild) listSelectedResta.removeChild(listSelectedResta.firstChild);
+        if(divListMatrices.firstChild) divListMatrices.removeChild(divListMatrices.firstChild);
+        if(listMxResta.firstChild) listMxResta.removeChild(listMxResta.firstChild);
+        if(listMxSuma.firstChild) listMxSuma.removeChild(listMxSuma.firstChild);
+    }
+
+    listSelectedSuma.classList.add('hidden');
+    listSelectedResta.classList.add('hidden');
+
+    let option = document.createElement('option');
+        option.value = -1;
+        option.innerText = 'Seleccione Matrices';
+    listMxSuma.appendChild(option);
+    option = document.createElement('option');
+        option.value = -1;
+        option.innerText = 'Seleccione Matrices';
+    listMxResta.appendChild(option);
 
     // carga todas las matrices desde lista nueva o modificada
     Matrix.list.forEach( (mx, index) => {
+        // lista de seleccion
         const divMx = document.createElement('div');
             divMx.classList.add('listMxs__item');
             divMx.id = index;
@@ -157,6 +219,16 @@ const loadList = () => {
         divMx.appendChild(btnDelete);
         divMx.appendChild(p);
         divListMatrices.appendChild(divMx);
+
+        // listas de operacion
+        option = document.createElement('option');
+            option.value = index;
+            option.innerText = mx.name;
+        listMxResta.appendChild(option);
+        option = document.createElement('option');
+            option.value = index;
+            option.innerText = mx.name;
+        listMxSuma.appendChild(option);
     });
 
     selectedMx = false;
@@ -169,18 +241,23 @@ const loadList = () => {
 
 //#region Acciones
 
+//#region SUMA
+
+listMxSuma.addEventListener('change', selectItemOperation)
+listMxResta.addEventListener('change', selectItemOperation)
+
+//#endregion
+
 // Guardar valores
 btnSaveValues.addEventListener('click', () => {
     if(!selectedMx) return;
+    const { mx, rows, columns} = Matrix.list[selectedMx.id];
     const cellsValue = [...mxDisMx.elm.children]
         .map(inp => inp.value.trim() !== '' ? parseFloat(inp.value) : null);
-    const mx = Matrix.list[selectedMx.id];
 
-    for (let i = 0; i < mx.rows; i++) {
-        for (let j = 0; j < mx.columns; j++) {
-            mx.mx[i][j] = cellsValue[i * mx.columns + j];
-        }
-    }
+    for (let i = 0; i < rows; i++)
+        for (let j = 0; j < columns; j++)
+            mx[i][j] = cellsValue[i * columns + j];
 
     changed = false;
     btnSaveValues.disabled = true;
@@ -206,8 +283,9 @@ btnSave.addEventListener('click', () => {
     const name = inpName.value;
 
     inpName.focus();
-    if (!isValidated(rows, columns, name)){
-        lblSave.innerHTML = "Campos incorrectos.";
+    const msg = isValidated(rows, columns, name);
+    if (msg){
+        lblSave.innerHTML = msg;
         return;
     }
     else lblSave.innerHTML = "";
@@ -220,5 +298,3 @@ btnSave.addEventListener('click', () => {
 })
 
 //#endregion
-
-divListMatrices.addEventListener('click', () => { }, true);

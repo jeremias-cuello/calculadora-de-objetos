@@ -129,6 +129,10 @@ body{
 	box-shadow: blue 0px 0px 5px;
 }
 
+.control__select{
+    width: 160px;
+}
+
 .control__select:focus{
     background-color: #3ca4ff;
 }
@@ -306,7 +310,7 @@ body{
     justify-content: center;
     font-family: 'Courier New', Courier, monospace;
     font-size: large;
-    text-shadow: 10px 10px 3px black;
+    text-shadow: 10px 20px 3px black;
     margin-top: 20px;
     border-top: solid black 5px;
     background-color: #385cff;
