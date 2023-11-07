@@ -23,45 +23,34 @@
             </div>
         </div>
         <div class="group">
-            <h2 class="group__title">Suma</h2>
+            <h2 class="group__title">Operaciones</h2>
             <div class="control">
-                <select class="control__select" id="listMxsOperatonSuma">
+                <select class="control__select" id="listOperations">
+                    <option value="-1">Seleccione Operaciones</option>
+                    <option value="sum">Suma</option>
+                    <option value="subtract">Resta</option>
+                    <option value="multiply">Multiplicación Matricial</option>
                 </select>
-                <ul class="listMxsOperation" id="listMxSelectedSuma">
-                </ul>
-                <button class="control__button" id="btnSum" type="button">Sumar</button>
-            </div>
-        </div>
-        <div class="group">
-            <h2 class="group__title">Resta</h2>
-            <div class="control">
-                <select class="control__select" id="listMxsOperatonResta">
+                <select class="control__select" id="listMxsOperations">
+                    <option value="-1">Seleccione Matrices</option>
                 </select>
-                <ul class="listMxsOperation" id="listMxSelectedResta">
-                    <li class="listMxsOperation__item" id="Mx7">MxG<button class="listMxs__button-quit">X</button></li>
-                    <hr class="line">
-                    <li class="listMxsOperation__item" id="Mx2">MxB<button class="listMxs__button-quit">X</button></li>
+                <ul class="listMxsOperation hidden" id="listMxSelectedOperations">
                 </ul>
-                <button class="control__button" id="btnSubstraction" type="button">Restar</button>
+                <button class="control__button hidden" id="btnOperations" type="button">Calcular</button>
             </div>
         </div>
         <div class="group">
-            <h2 class="group__title">Determinante</h2>
+            <h2 class="group__title">Operaciones Unarias</h2>
             <div class="control">
-                <label class="control__label" for="inpMxSelected-determinant">Matriz Seleccionada</label>
-                <input class="control__input" id="inpMxSelected-determinant" type="text" placeholder="No hay Matriz Seleccionada" readonly>
-                <label class="control__label" for="inpDeterminantResult">Determinante</label>
-                <input class="control__input" id="inpDeterminantResult" type="number" value="42" readonly>
-                <button class="control__button" id="btnDeterminant" type="button">Calcular Determinante</button>
-            </div>
-        </div>
-        <div class="group">
-            <h2 class="group__title">Cuadrado Mágico</h2>
-            <div class="control">
-                <label class="control__label" for="inpMxSelected-magicSquare">Matriz Seleccionada</label>
-                <input class="control__input" id="inpMxSelected-magicSquare" type="text" value="" placeholder="No hay Matriz Seleccionada" readonly>
-                <label class="control__label" id="lblMsjDeterminant" for="inpMxSelected-magicSquare"></label>
-                <button class="control__button" id="btnDeterminant" type="button" disabled="true">Completar</button>
+                <select class="control__select" id="listOperationsUnary">
+                    <option value="-1">Seleccione Operaciones</option>
+                    <option value="determinant">Determinante</option>
+                    <option value="transpose">Trasponer</option>
+                    <option value="squareMagic">Rellenar Cuadrado Mágico</option>
+                </select>
+                <label class="control__label" for="mxSelectedOpertaionsUnary">Matriz Seleccionada</label>
+                <input class="control__input" id ="mxSelectedOpertaionsUnary" type="text" placeholder="No hay Matriz Seleccionada" readonly>
+                <button class="control__button hidden" id="btnOperationsUnary" type="button"></button>
             </div>
         </div>
     </div>

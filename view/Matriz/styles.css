@@ -76,7 +76,7 @@ body{
     border: solid rgb(1, 1, 107) 1px;
     border-radius: 10px 10px 0px 0px;
     margin: 5px 5px;
-    padding: 15px 5px;
+    padding: 20px 5px;
     width: 120px;
     background-color: rgb(60, 112, 255);
     overflow-y: hidden;
@@ -130,7 +130,7 @@ body{
 }
 
 .control__select{
-    width: 160px;
+    width: 180px;
 }
 
 .control__select:focus{
