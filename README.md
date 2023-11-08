@@ -16,4 +16,6 @@ Cualquiera que desee colaborar en este repo es bienvenido. El entorno de desarro
     - [ ] Matriz Inversa
     - [ ] Boton "Agregar" para guardar resultados que son una matriz a la lista.
 
-Próximamente Vectores, Polinomios, Poligonos y Geometria Tridimensional.
+## Próximamente
+
+Vectores, Polinomios, Poligonos y Geometria Tridimensional.
