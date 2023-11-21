@@ -10,7 +10,8 @@ Cualquiera que desee colaborar en este repo es bienvenido. El entorno de desarro
     Matriz
     - [ ] Determinante
     - [x] Suma Matricial
-    - [ ] Multiplicación Matricial
+    - [x] Resta Matricial
+    - [x] Multiplicación Matricial
     - [ ] Multiplicación entre escalar y Matriz
     - [ ] Traspuesta
     - [ ] Matriz Inversa
