@@ -1,5 +1,4 @@
 import { Matrix } from "../models/models.matrix.js";
-
 let selectedMx = false;
 
 //#region devTools
@@ -14,7 +13,13 @@ const autoLoadMxs = () => {
             [8, 1, 6],
             [7, 6, 0]
         ]],
-        [2, 2, 'MxC'],
+        [5, 3, 'MxC', [
+            [5, 7, 9],
+            [0, 3, 5],
+            [1, 0, -6],
+            [4, 1, 5],
+            [5, 1, -3]
+        ]],
         [2, 2, 'MxD'],
         [4, 4, 'MxE'],
         [7, 3, 'MxF'],
@@ -29,7 +34,29 @@ const autoLoadMxs = () => {
             [3, 8, 4],
             [1, 8, 0]
         ]],
-        [3, 7, 'MxK']
+        [3, 7, 'MxK'],
+        [5, 3, 'MulmxA', [
+            [3, 5, 7],
+            [2, 4, 8],
+            [9, 8, 5],
+            [6, 7, 3],
+            [5, 9, 5]
+        ]],
+        [3, 4, 'MulmxB', [
+            [8, 4, 7, 5],
+            [2, 1, 9, 3],
+            [1, 8, 4, 7]
+        ]],
+        [4, 2, 'MulmxC', [
+            [3, 5],
+            [2, 4],
+            [9, 8],
+            [6, 7],
+        ]],
+        [2, 1, 'MulmxD', [
+            [2],
+            [5]
+        ]]
     ];
 
     mxs.forEach(mx => {
@@ -44,16 +71,9 @@ const autoLoadMxs = () => {
         const divSelected = divListMatrices.children[mxs.indexOf(mx)];
         divSelected.click();
         const cells = [...document.querySelectorAll('.celda')];
-        console.log(cells);
-        console.log(cells[5]);
-        for (let i = 0; i < mx[0]; i++) {
-            for (let j = 0; j < mx[1]; j++) {
-                console.log(`(${i}x${j})`);
-                console.log('(i * mx[1]) + j = ', (i * mx[1]) + j);
-                console.log('cells[(i * mx[1]) + j] = ', cells[(i * mx[1]) + j]);
+        for (let i = 0; i < mx[0]; i++)
+            for (let j = 0; j < mx[1]; j++)
                 cells[(i * mx[1]) + j].value = mx[3][i][j];
-            }
-        }
         selectedMx = divSelected;
         btnSaveValues.disabled = false;
         btnSaveValues.click();
@@ -69,13 +89,14 @@ const autoOperarMxs = (indexs, operation) => {
         selectListMxsOperations.value = ind;
         selectListMxsOperations.dispatchEvent(eventChange);
     });
-    btnOpeartions.click();
+    btnOperations.click();
 }
 
 // autoCompletar valores para hagilizar desarrollo
 document.addEventListener('DOMContentLoaded', () => {
-    // autoLoadMxs();
-    // autoOperarMxs([1, 10], 'sum');
+    autoLoadMxs();
+    // autoOperarMxs([1, 10], 'suma');
+    // autoOperarMxs([12, 13, 14, 15], 'multiplicacion');
 })
 
 //#endregion
@@ -97,8 +118,7 @@ const mxDisMx = {
     elm: document.querySelector('#vlvDisplayMx'),
     visible(matrix){
         if(matrix){
-            console.log('desde visible', matrix);
-            lblDisMx.innerHTML = matrix.name;
+            lblDisMx.innerText = inpMxSelected.value = matrix.name;
             const { mx, rows, columns } = matrix;
             this.elm.style.gridTemplateRows = `repeat(${rows}, 25px)`;
             this.elm.style.gridTemplateColumns = `repeat(${columns}, 25px)`;
@@ -128,7 +148,11 @@ const mxDisMx = {
                     inputs[(i * columns) + j].value = value;
                 }
             }
-        } else this.elm.classList.add('hidden');
+        } else {
+            this.elm.classList.add('hidden');
+            inpMxSelected.value = '';
+            lblDisMx.innerText = "Seleccione una matriz";
+        }
     }
 }
 
@@ -136,11 +160,13 @@ const mxDisMx = {
 const selectListOperations = document.querySelector('#listOperations');
 const selectListMxsOperations = document.querySelector('#listMxsOperations');
 const ulListMxSelectedOperations = document.querySelector('#listMxSelectedOperations');
-const btnOpeartions = document.querySelector('#btnOperations');
-const btnOpeartionsUnary = document.querySelector('#btnOperationsUnary');
+const btnOperations = document.querySelector('#btnOperations');
+const lblOperations = document.querySelector('#lblOperations');
 
 // Operaciones Unarias
 const selectListOperationsUnary = document.querySelector('#listOperations');
+const inpMxSelected = document.querySelector('#mxSelectedOpertaionsUnary');
+const btnOperationsUnary = document.querySelector('#btnOperationsUnary');
 
 //#endregion
 
@@ -198,26 +224,18 @@ const changeCells = () => {
 }
 
 const selectMxInList = e => {
-    let divSelected = e.target;
     const { tagName, parentNode } = e.target;
-
-    switch (tagName) {
-        case 'BUTTON': return;
-        case 'P': divSelected = parentNode; break;
-    }
+    const divSelected = tagName === 'P' ? parentNode : e.target;
 
     if(selectedMx === divSelected) return;
     if(selectedMx !== false) selectedMx.classList.remove('listMxs__item-selected');
 
     selectedMx = divSelected;
     selectedMx.classList.add('listMxs__item-selected');
-    const textNodeOfName = selectedMx.childNodes[1];
-    lblDisMx.innerText = textNodeOfName.innerText;
 
     const index = selectedMx.id.replace('mxList', '');
     const mx = Matrix.list[index];
     mxDisMx.visible(mx);
-
 }
 
 const isValidated = (rows, columns, name) => {
@@ -279,7 +297,6 @@ const loadList = () => {
     });
 
     selectedMx = false;
-    lblDisMx.innerText = "Seleccione una matriz";
     mxDisMx.visible(false);
 }
 
@@ -291,7 +308,6 @@ const loadList = () => {
 btnSaveValues.addEventListener('click', () => {
     if(!selectedMx) return;
     const index = selectedMx.id.replace('mxList', '');
-    console.log(Matrix.list[index]);
     const { mx, rows, columns} = Matrix.list[index];
     const cellsValue = [...mxDisMx.elm.children]
         .map(inp => inp.value.trim() !== '' ? parseFloat(inp.value) : null);
@@ -341,11 +357,11 @@ selectListMxsOperations.addEventListener('change', selectItemOperation);
 selectListOperations.addEventListener('change', () => {
     const { value } = selectListOperations.options[selectListOperations.selectedIndex];
 
-    if(value < 0) btnOpeartions.classList.add('hidden')
-    else btnOpeartions.classList.remove('hidden')
+    if(value < 0) btnOperations.classList.add('hidden')
+    else btnOperations.classList.remove('hidden')
 });
 
-btnOpeartions.addEventListener('click', () => {
+btnOperations.addEventListener('click', () => {
     const mxs = [...ulListMxSelectedOperations.children]
         .filter(li => li.tagName === 'LI')
         .map(li => {
@@ -353,10 +369,33 @@ btnOpeartions.addEventListener('click', () => {
             return Matrix.list[index];
     });
 
-    console.log(mxs);
-    const MXrESULTANTE = Matrix.sumAll(...mxs);
-    console.log('mxResult = ', MXrESULTANTE);
-    mxDisMx.visible(MXrESULTANTE);
+    if(selectedMx){
+        selectedMx.classList.remove('listMxs__item-selected');
+        selectedMx = false;
+        inpMxSelected.value = '';
+    }
+    const operation = selectListOperations.options[selectListOperations.selectedIndex].innerText.toLowerCase();
+    let mxResult = null;
+    try {
+        switch (operation) {
+            case 'suma':
+                mxResult = Matrix.sum(...mxs);
+                break;
+            case 'resta':
+                mxResult = Matrix.sustraction(...mxs);
+                break;
+            case 'multiplicación matricial':
+                mxResult = Matrix.matrixMultiplication(...mxs);
+                break;
+        }
+
+        lblOperations.innerHTML = '';
+    } catch (err) {
+        lblOperations.innerHTML = err;
+        mxDisMx.visible(false);
+    }
+
+    mxDisMx.visible(mxResult);
 })
 
 //#endregion
