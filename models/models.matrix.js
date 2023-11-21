@@ -2,7 +2,7 @@ class Matrix {
     /**
      * @param {number} rowsParam cantidad de filas
      * @param {number} columnsParam cantidad de columnas
-     * @param {[...[number]]} valuesParam valores
+     * @param {[...[number]]} valuesParam matriz
      */
     constructor(rowsParam, columnsParam, nameParam, valuesParam) {
         if(valuesParam !== undefined && rowsParam !== undefined && columnsParam !== undefined && nameParam !== undefined){
@@ -24,50 +24,21 @@ class Matrix {
         }
     }
 
-    get isSquare() {
-        return this.rows === this.columns;
-    }
-
-    /**
-     * @return {{sup : Boolean, inp : Boolean}}
-     */
-    get isTriangular() {
-        console.group('isTriangular');
-
-        console.log(`this.rows = ${this.rows}`);
-        console.log(`this.columns = ${this.columns}`);
-
-        let supResult = true, infResult = true;
-
-        console.group('superior');
-        if(this.rows === 1) supResult = false;
-        for (let col = 0; col < this.columns && supResult; col++){
-            for (let row = col + 1; row < this.rows && supResult; row++){
-                console.log(`(${row} x ${col} = ${this.mx[row][col]})`);
-                supResult = this.mx[row][col] == 0;
-            }
-        }
-        console.groupEnd('superior');
-
-        console.group('inferior');
-        if(this.columns === 1) infResult = false;
-        for (let row = 0; row < this.rows && infResult; row++) {
-            for (let col = row + 1; col < this.columns && infResult; col++) {
-                console.log(`(${row} x ${col} = ${this.mx[row][col]})`);
-                infResult = this.mx[row][col] == 0;
-            }
-        }
-        console.groupEnd('inferior');
-
-        console.groupEnd('isTriangular');
-        return { sup: supResult, inf: infResult }
-    }
-
     get mx(){ return this._mx; }
     set mx(value){
         if(value.length === this.rows && value[0].length === this.columns)
             this._mx = value;
         else throw new Error('Filas y columnas no coincidentes con los coeficientes.');
+    }
+
+    get mxString(){
+        let result = '\n';
+
+        for (let i = 0; i < this.rows; i++) {
+            result += `  [${this.mx[i].join(', ')}]\n`;
+        }
+
+        return result;
     }
 
     get rows() { return this._rows; }
@@ -82,6 +53,47 @@ class Matrix {
         else throw new Error("Valor de columna incorrecto");
     }
 
+    get isSquare() { return this.rows === this.columns; }
+
+    get isIdentity(){
+        if(!this.isSquare || !this.isEscalar) return false;
+
+        let result = true;
+
+        for (let i = 0; i < this.rows && result; i++)
+            result &&= this.mx[i][i] === 1;
+
+        return result;
+    }
+
+    get isEscalar() {
+        if(typeof this._isEscalar === 'undefined') {
+            this.isTriangular;
+            return this._isEscalar;
+        }
+        else return this._isEscalar;
+    }
+
+    /**
+     * @return {{sup : Boolean, inp : Boolean}}
+     */
+    get isTriangular() {
+        let supResult = true, infResult = true;
+
+        if(this.rows === 1) supResult = false;
+        for (let col = 0; col < this.columns && supResult; col++)
+            for (let row = col + 1; row < this.rows && supResult; row++)
+                supResult = this.mx[row][col] == 0;
+
+        if(this.columns === 1) infResult = false;
+        for (let row = 0; row < this.rows && infResult; row++)
+            for (let col = row + 1; col < this.columns && infResult; col++)
+                infResult = this.mx[row][col] == 0;
+
+        this._isEscalar = (supResult && infResult) || (this.rows == 1 && this.columns == 1) || (this.mx[0][0] == 1);
+        return { sup: supResult, inf: infResult }
+    }
+
     get determinante() {
         //DEV:
         if (!this.isSquare) throw new Error("La matriz no es cuadrada.");
@@ -92,87 +104,140 @@ class Matrix {
         }
     }
 
-    transpose() {
-        const mxNew = Matrix(this.columns, this.rows);
+    get transpose() {
+        const mxNew = new Matrix(this.columns, this.rows, 'MxTranspose');
 
-        for (let i = 0; i < this.mx.rows; i++) {
-            for (let j = 0; j < this.mx.columns; j++) {
+        for (let i = 0; i < this.rows; i++)
+            for (let j = 0; j < this.columns; j++)
                 mxNew.mx[j][i] = this.mx[i][j];
-            }
-        }
 
         return mxNew;
     };
 
     /**
-     * @param {Matrix} mxA Sumando
-     * @param {Matrix} mxB Sumando
-     * @returns Matriz Suma
+     * @param  {...Matrix} mxs Arreglo de Matrix
+     * @returns Matriz suma
      */
-    static sum(mxA, mxB){
-        const mxResult = new Matrix(mxA.rows, mxA.rows, `Suma${mxA.name}${mxB.name}`);
+    static sum(...mxs){
+        /**
+         * @param {Matrix} mxA Sumando
+         * @param {Matrix} mxB Sumando
+         * @returns Matriz Suma
+         */
+        const _sum = (mxA, mxB) => {
+            if(mxA.rows !== mxB.rows || mxA.columns !== mxB.columns) throw new Error('Orden de matrices diferentes.');
+            const mxResult = new Matrix(mxA.rows, mxA.columns, 'n/n');
 
-        for (let i = 0; i < mxResult.rows; i++)
-            for (let j = 0; j < mxResult.columns; j++)
-                mxResult.mx[i][j] = mxA.mx[i][j] + mxB.mx[i][j];
+            for (let i = 0; i < mxResult.rows; i++)
+                for (let j = 0; j < mxResult.columns; j++)
+                    mxResult.mx[i][j] = mxA.mx[i][j] + mxB.mx[i][j];
+
+            return mxResult;
+        }
+
+        if(mxs.length < 2) throw new Error('Cantidad de matrices insuficientes.');
+
+        let mxAcc = mxs[0];
+
+        for (let i = 1; i < mxs.length; i++)
+            mxAcc = _sum(mxAcc, mxs[i]);
+
+        mxAcc.name = mxs.length <= 3 ? mxs.map(mx => mx.name).join(' + ') : 'SumaResultante';
+
+        return mxAcc;
+    }
+
+    static sustraction(...mxs){
+        const frsItem = mxs.shift();
+        const mxAux = mxs.map(mx => {
+            const res = mx.scalarMultiplication(-1);
+            res.name = mx.name;
+            return res;
+        });
+        const mxsSustraction = [frsItem].concat(mxAux);
+        const mxResult = this.sum(...mxsSustraction);
+
+        mxResult.name = mxsSustraction.length <= 3 ? mxsSustraction.map(mx => mx.name).join(' - ') : 'RestaResultante';
 
         return mxResult;
     }
 
-    static sumAll(...Mxs){
-        if(!Mxs.length) throw new Error('Lista de matrices vacia');
+    /**
+     * @param  {...Matrix} mxs
+     * @returns Matriz producto
+     */
+    static matrixMultiplication = (...mxs) => {
 
-        let mxAcc = Mxs[0];
+        const isMultiplyableAll = (...mxs) => {
 
-        for (let i = 1; i < Mxs.length; i++) {
-            mxAcc = this.sum(mxAcc, Mxs[i]);
+            let acc = true;
+
+            for (let i = 0; i < mxs.length && acc; i++) {
+                const posNext = i + 1;
+                if (posNext >= mxs.length) break;
+
+                const curr = mxs[i];
+                const next = mxs[posNext];
+                acc &&= curr.columns === next.rows;
+            }
+
+            return acc;
+        };
+
+        const multiplication = (mxA, mxB) => {
+            const mxResult = new Matrix(mxA.rows, mxB.columns, 'n/n');
+
+            // inicializando
+            mxResult.mx = mxResult.mx.map(row => row.fill(0));
+
+            const common = mxA.columns || mxB.rows; // mxA.columns == mxB.rows
+            for (let i = 0; i < mxA.rows; i++)
+                for (let j = 0; j < common; j++)
+                    for (let k = 0; k < mxB.columns; k++)
+                        mxResult.mx[i][k] += mxA.mx[i][j] * mxB.mx[j][k];
+
+            return mxResult;
         }
 
-        mxAcc.name = 'Suma';
-        return mxAcc;
+        if(mxs.length < 2) throw new Error('Matrices insuficientes');
+        if(!isMultiplyableAll(...mxs)) throw new Error('Matrices no multiplicables');
+
+        let mxResult = mxs[0];
+        for (let i = 1; i < mxs.length; i++)
+            mxResult = multiplication(mxResult, mxs[i]);
+
+        mxResult.name = mxs.length <= 3 ? mxs.map(mx => mx.name).join(' x ') : 'ProductoResultante';
+
+        return mxResult;
     }
 
-    static ismultiplyable = (mxA, mxB) => mxA.columns === mxB.rows;
-    static ismultiplyableAll = (...Mxs) => {
-        if(!Mxs.length) return false;
+    /**
+     * @param {Matrix} mx
+     * @param {number} scalar
+     * @returns Matriz producto
+     */
+    scalarMultiplication = scalar => {
+        const mxResult = new Matrix(this.rows, this.columns, `${scalar}*${this.name}`);
+        mxResult.mx = this.mx.map(row => row.map(cell => cell * scalar));
+        return mxResult;
+    }
 
-        let acc = true;
-
-        for (let i = 0; (i < Mxs.length) && acc; i++) {
-            const posNext = i + 1;
-            if (posNext >= Mxs.length) break;
-
-            const curr = Mxs[i];
-            const next = Mxs[posNext];
-            curr.rows = Mxs[0].rows; // la fila de 1er Mx se conserva
-            acc &&= this.ismultiplyable(curr, next);
-        }
-
-        return acc;
-    };
-
-    toString(){
-        return `Nombre: ${this.name}\nFilas: ${this.rows}\nColumnas ${this.columns}\n`;
+    toString(name){
+        const nombre = typeof name === 'undefined' ? 'Nombre' : name;
+        return `\n${nombre}: ${this.name}\n` +
+        `Filas: ${this.rows}\n` +
+        `Columnas: ${this.columns}\n` +
+        `Matriz: ${this.mxString}`;
     }
 
     //#region metodos de lista
     static _list = [];
     static get list() { return this._list }
-    static find(searchName){
-        const listMxs = this._list.filter(({name}) => name === searchName || name.includes(searchName) );
-        return listMxs;
-    }
     static add(mxNew){
         this._list.push(mxNew);
     }
     static delete(indexMx){
         this._list.splice(indexMx, 1);
-    }
-    static update(indexMx){
-        _list[indexMx].name = mxUpdate.name;
-        _list[indexMx].rows = mxUpdate.rows;
-        _list[indexMx].columns = mxUpdate.columns;
-        _list[indexMx].mx = mxUpdate.mx;
     }
     //#endregion
 }
