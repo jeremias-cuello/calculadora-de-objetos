@@ -68,10 +68,11 @@ Esto significa que ser identidad implica ser escalar, por este entonces primero 
 
 ## subMx(row, col)
 
-- [] developed
-- [] tested
+- [x] developed
+- [x] tested
 
 Retorna una submatriz de la matriz. Se remueve de la matriz original la columna `col` y la fila `row`. La matriz es de (rows-1 x columns-1).
+Por lo tanto rows y columns deben ser > 1 porque sino seria de (0 x 0) y ese no existe.
 
 ## cofactor
 

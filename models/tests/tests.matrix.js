@@ -325,19 +325,22 @@ function tstSubMx() {
     const mxsTest = [
         new Matrix(5, 3, 'mxA'),
         new Matrix(2, 2, 'mxB'),
-        new Matrix(8, 6, 'mxC')
+        new Matrix(8, 6, 'mxC'),
+        new Matrix(2, 10, 'mxD'),
     ];
 
     mxsTest.forEach(mx => mx.mx = fillCells(mx, 1, 5));
-    mxsTest.forEach(mx => {
-        const rowToDelete = rnd(1, mx.rows);
-        const colToDelete = rnd(1, mx.columns);
-        const res = mx.subMx(rowToDelete, colToDelete);
 
+    mxsTest.forEach(mx => {
         console.log(mx.toString());
+        const rowToDelete = rnd(0, mx.rows - 1);
+        const colToDelete = rnd(0, mx.columns - 1);
+
         console.log(`rowToDelete = ${rowToDelete}`);
         console.log(`colToDelete = ${colToDelete}`);
+        const res = mx.subMx(rowToDelete, colToDelete);
         console.log(res.toString());
     })
 }
 
+tstSubMx();

@@ -95,12 +95,12 @@ class Matrix {
     }
 
     get determinante() {
-        //DEV:
         if (!this.isSquare) throw new Error("La matriz no es cuadrada.");
         const { sup, inf } = this.isTiangular;
         if(sup || inf){
-            const diaPrin = this.mx.map((row, indRow) => row[indRow]);
-            return diaPrin.reduce((acc, numCurr) => acc * numCurr, 1);
+            return this.mx
+                .map( (row, indRow) => row[indRow])
+                .reduce( (acc, cell) => acc * cell, 1);
         }
     }
 
@@ -219,6 +219,19 @@ class Matrix {
     scalarMultiplication = scalar => {
         const mxResult = new Matrix(this.rows, this.columns, `${scalar}*${this.name}`);
         mxResult.mx = this.mx.map(row => row.map(cell => cell * scalar));
+        return mxResult;
+    }
+
+    subMx(rowToDelete, colToDelete){
+        if(this.rows <= 1 || this.columns <= 1) throw new Error(`No se puede determinar una sub-matriz de (${this.rows} x ${this.columns})`);
+
+        const mxResult = new Matrix(this.rows - 1, this.columns - 1, `Sub${this.name}[${rowToDelete};${colToDelete}]`);
+
+        const mxAux = this.mx;
+        mxAux.splice(rowToDelete, 1);
+        mxAux.forEach(row => row.splice(colToDelete, 1));
+        mxResult.mx = mxAux;
+
         return mxResult;
     }
 
