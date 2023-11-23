@@ -3,7 +3,7 @@
 ## Constructor
 
 - [x] developed
-- [] tested
+- [ ] tested
 
 Parametros:
 
@@ -76,10 +76,10 @@ Por lo tanto rows y columns deben ser > 1 porque sino seria de (0 x 0) y ese no 
 
 ## cofactor
 
-- [] developed
-- [] tested
+- [x] developed
+- [x] tested
 
-Es una operacion de las celdas.
+Es una operacion de las celdas. Pero tambien se puede utilizar para mencionar la `matriz cofactor` y por lo tanto tambien es una operacion de matrices, pero ésta usa ("dentro") cofactor como operacion de celdas.
 
 cof(a[i;j]) = (-1)^(i + j) * det(subMx(i, j))
 
@@ -89,8 +89,8 @@ Cuando actua SubMx dá la posibilidad que la matriz sea de 2x2 facilitando el ca
 
 ## determinant
 
-- [] developed
-- [] tested
+- [x] developed
+- [ ] tested
 
 El cálculo del determinante es aplicable a matrices cuadradas.
 
@@ -173,10 +173,6 @@ La multiplicación entre matrices resulta ser otra matriz de orden (MxA.rows x M
 
 ![some text](https://jeremiascuello.000webhostapp.com/CDN/calculadora-de-objetos/multiplicacionMatricial.png)
 
-### ismultiplyable(mxA, mxB)
-
-Determina si MxA es multiplicable por MxB
-
 La multiplicacion de matrices no es conumutativa generalmente
 
     MxA * MxB != MxB * MxA
@@ -185,7 +181,7 @@ Esto quiere decir que el orden es importante (como la resta de numeros).
 
 ### ismultiplyableAll(...mxs)
 
-Determina si las matrices de mxs son multiplicables, para saber si una matriz es multiplicable por otra es sencillo pero tener en cuenta que se deben correlacionar el orden de la multiplicacion de las matrices que se desea hacer con la determinacion de multiplicidad entre ellas. Es decir, si la multiplicacion es `MxA * MxB * MxC * MxD` entonces la determinacion para saber si son multiplicables debe tener el mismo orden (MxA; MxB; MxC; MxD). Tambien tener en cuenta que cada multiplicacion que se hace es una nueva matriz, por lo tanto hacer una verificacion de multiplicidad entre las matrices de esta forma seria incorrecto:
+Determina si las matrices de mxs son multiplicables, para saber si una matriz es multiplicable por otra es sencillo (mxA.columns == mxB.rows) pero tener en cuenta que se deben correlacionar el orden de la multiplicacion de las matrices que se desea hacer con la determinacion de multiplicidad entre ellas. Es decir, si la multiplicacion es `MxA * MxB * MxC * MxD` entonces la determinacion para saber si son multiplicables debe tener el mismo orden (MxA; MxB; MxC; MxD). Tambien tener en cuenta que cada multiplicacion que se hace es una nueva matriz, por lo tanto hacer una verificacion de multiplicidad entre las matrices de esta forma seria incorrecto:
 
 1. verificar ismultiplyable(MxA, MxB)
 2. verificar ismultiplyable(MxB, MxC)
@@ -203,19 +199,33 @@ La multiplicación se define como la suma de multiplicaciones de una fila de la 
 
 ![some text](https://jeremiascuello.000webhostapp.com/CDN/calculadora-de-objetos/multiplicacionMatricialDefinicion.png)
 
-## getMxInverse
+## cofactorMx
 
-- [] developed
-- [] tested
+- [x] developed
+- [x] tested
+
+Devuelve la matriz de cofactores
+    cof(MxA): es la sustitucion de cada término (celda) de la matriz por su cofactor. Recuerdese que el cofactor es utilizado para las operaciones de celdas.
+
+## adjointMx
+
+- [x] developed
+- [x] tested
+
+Devuelve la matriz adjunta. Es la traspuesta de la matriz de cofactores.
+`adjointMx(MxA) = transpose( cofactorMx(Mxa) )`
+
+## inverseMx
+
+- [ ] developed
+- [ ] tested
 
 La matriz inversa se obtiene solo con matrices cuadradas y no todas las tienen. Símbolo: MxA^(-1) es una matriz tal que cumple
 
     MxA * MxA^(-1) = MxId | MxId es escalar de coeficientes = 1 del mismo orden que MxA
 
-una matriz tiene inversa si el determinante de esa matriz es distinto de cero. Esto es porque la formula para determinar la inversa de una matriz es la siguiente:
+Una matriz tiene inversa si el determinante de esa matriz es distinto de cero. Esto es porque la formula para determinar la inversa de una matriz es la siguiente (no se puede diividir por cero):
 
-    MxA^(-1) = Adj(MxA) / det(MxA)
+    MxA^(-1) = adjointMx(MxA) / det(MxA)
 
-    Adj(MxA) = transpose( cof(Mxa) )  <transpose ya esta explicado>
-    cof(MxA): es la sustitucion de cada termina de la matriz por su cofactor
     Nota: det(MxA) = | MxA | (en simbolo)

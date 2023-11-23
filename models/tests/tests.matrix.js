@@ -3,12 +3,7 @@ import { Matrix } from '../models.matrix.js';
 function rnd(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-/**
- * Devuelve una matriz
- * @param {Matrix} mx
- * @param {number} min
- * @param {number} max
- */
+
 function fillCells({rows, columns}, min, max) {
     const mxResult = Array.from({length: rows}, () => Array.from({length: columns}));
 
@@ -343,4 +338,55 @@ function tstSubMx() {
     })
 }
 
-tstSubMx();
+function tstCofactor() {
+    const mxsTest = [
+        new Matrix(3, 3, 'mxA', [
+            [9, 7, 2],
+            [5, 3, 9],
+            [3, 8, 5]
+        ]),
+        new Matrix(3, 3, 'mxA', [
+            [5, -2, 4],
+            [6, 7, -3],
+            [3, 0, 2]
+        ])
+    ];
+
+    const mx = mxsTest[1];
+    for (let i = 0; i < mx.rows; i++) {
+        for (let j = 0; j < mx.columns; j++) {
+            console.log(i, j);
+            const result = mx.cofactor(i, j);
+            console.log(`cofactor ${result}`);
+        }
+    }
+
+}
+
+function tstcofactorMx() {
+    const mxsTest = [
+        new Matrix(3, 3, 'mxA', [
+            [9, 7, 2],
+            [5, 3, 9],
+            [3, 8, 5]
+        ]),
+        new Matrix(3, 3, 'mxB', [
+            [5, -2, 4],
+            [6, 7, -3],
+            [3, 0, 2]
+        ])
+        // , new Matrix(2, 4, 'MxC')
+    ];
+
+    // mxsTest[2].mx = fillCells(mxsTest[2], -10, 50);
+
+    mxsTest.forEach(mx => {
+        console.log(mx.toString('original'));
+        const cftMx = mx.cofactorMx;
+        console.log(cftMx.toString());
+        const adjointMx = mx.adjoinMx;
+        console.log(adjointMx.toString());
+    })
+}
+
+tstcofactorMx();

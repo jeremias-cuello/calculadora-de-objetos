@@ -1,7 +1,8 @@
-class Matrix {
+class Matrix{
     /**
      * @param {number} rowsParam cantidad de filas
      * @param {number} columnsParam cantidad de columnas
+     * @param {string} nameParam nombre
      * @param {[...[number]]} valuesParam matriz
      */
     constructor(rowsParam, columnsParam, nameParam, valuesParam) {
@@ -60,14 +61,14 @@ class Matrix {
 
         let result = true;
 
-        for (let i = 0; i < this.rows && result; i++)
+        for (let i = 0; result && i < this.rows; i++)
             result &&= this.mx[i][i] === 1;
 
         return result;
     }
 
     get isEscalar() {
-        if(typeof this._isEscalar === 'undefined') {
+        if(this._isEscalar === undefined) {
             this.isTriangular;
             return this._isEscalar;
         }
@@ -94,14 +95,28 @@ class Matrix {
         return { sup: supResult, inf: infResult }
     }
 
+    /**
+     * @returns {Number}
+     */
     get determinante() {
         if (!this.isSquare) throw new Error("La matriz no es cuadrada.");
-        const { sup, inf } = this.isTiangular;
-        if(sup || inf){
+
+        const tam = this.rows;
+        if(tam === 1) return this.mx[0][0];
+        if(tam === 2) return this.mx[0][0] * this.mx[1][1] - this.mx[1][0] * this.mx[0][1];
+        const { sup, inf } = this.isTriangular;
+        if(sup || inf)
             return this.mx
                 .map( (row, indRow) => row[indRow])
                 .reduce( (acc, cell) => acc * cell, 1);
+
+        // desarrollo de La Place
+        let acc = 0;
+        for (let i = 0; i < tam; i++) {
+            acc += this.mx[0][i] * this.cofactor(0, i);
         }
+
+        return acc;
     }
 
     get transpose() {
@@ -113,6 +128,26 @@ class Matrix {
 
         return mxNew;
     };
+
+    get cofactorMx(){
+        if(this.rows <= 1 || this.columns <= 1) throw new Error(`No se puede determinar la matriz de cofactores de (${this.rows} x ${this.columns})`);
+
+        const mxResult = new Matrix(this.rows, this.columns, `cof${this.name}`);
+
+        for (let i = 0; i < this.rows; i++) {
+            for (let j = 0; j < this.columns; j++) {
+                mxResult.mx[i][j] = this.cofactor(i, j);
+            }
+        }
+
+        return mxResult;
+    }
+
+    get adjoinMx(){
+        const mxResult = this.cofactorMx.transpose;
+        mxResult.name = `ajoint(${this.name})`;
+        return mxResult;
+    }
 
     /**
      * @param  {...Matrix} mxs Arreglo de Matrix
@@ -216,7 +251,7 @@ class Matrix {
      * @param {number} scalar
      * @returns Matriz producto
      */
-    scalarMultiplication = scalar => {
+    scalarMultiplication(scalar){
         const mxResult = new Matrix(this.rows, this.columns, `${scalar}*${this.name}`);
         mxResult.mx = this.mx.map(row => row.map(cell => cell * scalar));
         return mxResult;
@@ -227,16 +262,23 @@ class Matrix {
 
         const mxResult = new Matrix(this.rows - 1, this.columns - 1, `Sub${this.name}[${rowToDelete};${colToDelete}]`);
 
-        const mxAux = this.mx;
+        const mxAux = Array.from({length: this.rows}, () => Array.from({length: this.columns}).fill(null));
+        for (let i = 0; i < this.rows; i++)
+            Object.assign(mxAux[i], this.mx[i]);
         mxAux.splice(rowToDelete, 1);
         mxAux.forEach(row => row.splice(colToDelete, 1));
-        mxResult.mx = mxAux;
+        Object.assign(mxResult.mx, mxAux);
 
         return mxResult;
     }
 
+    cofactor(rowCell, colCell){
+        const sign = (rowCell + colCell) % 2 == 0 ? 1 : -1;
+        return sign * this.subMx(rowCell, colCell).determinante;
+    }
+
     toString(name){
-        const nombre = typeof name === 'undefined' ? 'Nombre' : name;
+        const nombre = name === undefined ? 'Nombre' : name;
         return `\n${nombre}: ${this.name}\n` +
         `Filas: ${this.rows}\n` +
         `Columnas: ${this.columns}\n` +
