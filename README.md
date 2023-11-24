@@ -12,8 +12,8 @@ Cualquiera que desee colaborar en este repo es bienvenido. El entorno de desarro
     - [x] Suma Matricial
     - [x] Resta Matricial
     - [x] Multiplicación Matricial
-    - [ ] Multiplicación entre escalar y Matriz
-    - [ ] Traspuesta
+    - [x] Multiplicación entre escalar y Matriz
+    - [x] Traspuesta
     - [ ] Matriz Inversa
     - [x] Boton "Agregar" para guardar resultados que son una matriz a la lista.
 
