@@ -407,9 +407,13 @@ btnSave.addEventListener('click', () => {
         divListMatrices.classList.remove('hidden');
         inpColumns.removeAttribute('readonly');
         inpRows.removeAttribute('readonly');
+        btnSaveValues.classList.remove('hidden');
+        btnSaveMatrix.classList.add('hidden');
         saveResult = false;
     } else {
         mx = new Matrix(rows, columns, name);
+        btnSaveValues.classList.remove('hidden');
+        btnSaveMatrix.classList.add('hidden');
     }
 
     Matrix.add(mx);
