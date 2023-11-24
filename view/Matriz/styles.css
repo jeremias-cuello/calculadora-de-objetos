@@ -308,12 +308,12 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 10px;
+    flex-direction: column;
     font-family: 'Courier New', Courier, monospace;
     font-size: large;
-    text-shadow: 10px 20px 3px black;
     margin-top: 20px;
     border-top: solid black 5px;
     background-color: #385cff;
-    display: flex;
     height: 100px;
 }
