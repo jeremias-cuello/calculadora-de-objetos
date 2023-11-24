@@ -98,7 +98,7 @@ class Matrix{
     /**
      * @returns {Number}
      */
-    get determinante() {
+    get determinant() {
         if (!this.isSquare) throw new Error("La matriz no es cuadrada.");
 
         const tam = this.rows;
@@ -274,7 +274,7 @@ class Matrix{
 
     cofactor(rowCell, colCell){
         const sign = (rowCell + colCell) % 2 == 0 ? 1 : -1;
-        return sign * this.subMx(rowCell, colCell).determinante;
+        return sign * this.subMx(rowCell, colCell).determinant;
     }
 
     toString(name){

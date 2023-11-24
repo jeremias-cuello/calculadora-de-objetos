@@ -389,4 +389,69 @@ function tstcofactorMx() {
     })
 }
 
-tstcofactorMx();
+function tstDeterminant() {
+    const mxsTest = [
+        new Matrix(1, 1, '(1x1)'),
+        new Matrix(1, 1, '(1x1)'),
+        new Matrix(2, 2, '(2x2)'),
+        new Matrix(2, 2, '(2x2)'),
+        new Matrix(3, 3, '(3x3)', [
+            [5, 3, 6],
+            [9, 2, 8],
+            [1, 4, 7],
+        ]),
+        new Matrix(3, 3, '(3x3)', [
+            [-5, 11, 11],
+            [-5, 16, 3],
+            [20, 19, 13]
+        ]),
+        new Matrix(4, 4, '(4x4)', [
+            [19, -3, 14, -8],
+            [-9, -6, 17, 19],
+            [7, -8, 6, -4],
+            [-8, 0, -1, -8]
+        ]),
+        new Matrix(4, 4, '(4x4)', [
+            [7, 6, 16, -6],
+            [10, 4, 6, 7],
+            [3, 0, 2, 19],
+            [9, -7, 0, -3]
+        ]),
+        new Matrix(5, 5, 'LaPlace(5x5)', [
+            [17, -3, -2, 9, 6],
+            [2, -3, 5, 5, -4],
+            [-3, -2, 2, -8, 1],
+            [3, -2, -2, 0, 18],
+            [15, 14, -8, 17, -10]
+        ]),
+        new Matrix(5, 5, 'LaPlace(5x5)', [
+            [15, -3, -4, -10, 7],
+            [0, 0, 11, 12, 8],
+            [19, 12, 17, 18, 5],
+            [3, -9, 4, -5, -8],
+            [9, -5, 11, 8, 17]
+        ])
+    ];
+
+    const expected = [86787, -55978];
+
+    /* mxsTest.forEach(mx => {
+        if(mx.mx[0][0] === null){
+            mx.mx = fillCells(mx, -10, 20)
+        }
+    }) */;
+
+    for (let i = 8; i < 10; i++) {
+        const mxA = mxsTest[i];
+        console.log(mxA.toString());
+        const result = mxA.determinant
+        console.log(`determinante: ${result}`);
+        if(expected[i-8] === result){
+            console.log('PASOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO');
+        } else {
+            console.log('no paso :(');
+        }
+    }
+}
+
+tstDeterminant();
