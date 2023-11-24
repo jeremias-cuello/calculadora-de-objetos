@@ -56,7 +56,8 @@ const autoLoadMxs = () => {
         [2, 1, 'MulmxD', [
             [2],
             [5]
-        ]]
+        ]],
+        [2, 2, 'SquareA']
     ];
 
     mxs.forEach(mx => {
@@ -70,7 +71,7 @@ const autoLoadMxs = () => {
     mxsToFill.forEach((mx) => {
         const divSelected = divListMatrices.children[mxs.indexOf(mx)];
         divSelected.click();
-        const cells = [...document.querySelectorAll('.celda')];
+        const cells = [...document.querySelectorAll('.cell')];
         for (let i = 0; i < mx[0]; i++)
             for (let j = 0; j < mx[1]; j++)
                 cells[(i * mx[1]) + j].value = mx[3][i][j];
@@ -80,14 +81,22 @@ const autoLoadMxs = () => {
     });
 };
 
+/**
+ * @param {[number]} indexs
+ * @param {string} operation { 'sum', 'substract', 'multiply' }
+ */
 const autoOperarMxs = (indexs, operation) => {
-    const eventChange = new Event('change');
-    selectListOperations.selectedIndex = 1;
+    // sacar las matrices en lista para operar
+    [...ulListMxSelectedOperations.children]
+        .filter(e => e.tagName === 'LI')
+        .map(li => [...li.children].filter(e => e.tagName === 'BUTTON')[0])
+        .forEach(btn => btn.click())
+
     selectListOperations.value = operation;
-    selectListOperations.dispatchEvent(eventChange);
+    selectListOperations.dispatchEvent(new Event('change'))
     indexs.forEach(ind => {
         selectListMxsOperations.value = ind;
-        selectListMxsOperations.dispatchEvent(eventChange);
+        selectListMxsOperations.dispatchEvent(new Event('change'));
     });
     btnOperations.click();
 }
@@ -95,8 +104,8 @@ const autoOperarMxs = (indexs, operation) => {
 // autoCompletar valores para hagilizar desarrollo
 document.addEventListener('DOMContentLoaded', () => {
     autoLoadMxs();
-    // autoOperarMxs([1, 10], 'suma');
-    // autoOperarMxs([12, 13, 14, 15], 'multiplicacion');
+    autoOperarMxs([1, 10], 'subtract');
+    autoOperarMxs([12, 13, 14, 15], 'multiply');
 })
 
 //#endregion
@@ -109,16 +118,20 @@ const inpColumns = document.querySelector('#inpColumns');
 const inpName = document.querySelector('#inpName');
 const lblSave = document.querySelector('#lblSave');
 const btnSave = document.querySelector('#btnSave');
+let saveResult = false;
 
 // Display Matriz
 const divListMatrices = document.querySelector('.listMxs');
 const lblDisMx = document.querySelector('#lblDisplayMx');
 const btnSaveValues = document.querySelector('#saveValues');
+const btnSaveMatrix = document.querySelector('#saveMatrix');
 const mxDisMx = {
     elm: document.querySelector('#vlvDisplayMx'),
-    visible(matrix){
+    mxVisible: null,
+    visible(matrix, isResult){
         if(matrix){
-            lblDisMx.innerText = inpMxSelected.value = matrix.name;
+            this.mxVisible = matrix;
+            lblDisMx.innerText = matrix.name;
             const { mx, rows, columns } = matrix;
             this.elm.style.gridTemplateRows = `repeat(${rows}, 25px)`;
             this.elm.style.gridTemplateColumns = `repeat(${columns}, 25px)`;
@@ -128,12 +141,12 @@ const mxDisMx = {
 
             // agregar o sacar celdas
             if (cntInps > cntCells)
-                while(this.elm.children.length != cntCells)
+                while(this.elm.children.length > cntCells)
                     this.elm.removeChild(this.elm.lastChild);
             else if (cntInps < cntCells)
-                while (cntInps != cntCells) {
+                while (cntInps < cntCells) {
                     const inp = document.createElement('input');
-                    inp.classList.add('celda');
+                    inp.classList.add('cell');
                     inp.addEventListener('change', changeCells)
                     inp.type = 'number';
                     this.elm.appendChild(inp);
@@ -148,7 +161,22 @@ const mxDisMx = {
                     inputs[(i * columns) + j].value = value;
                 }
             }
+
+            if(isResult) {
+                inpMxSelected.value = '';
+                btnSaveValues.classList.add('hidden');
+                btnSaveMatrix.classList.remove('hidden');
+                [...document.querySelectorAll('.cell')]
+                    .forEach(inp => inp.setAttribute('readonly', true))
+            } else {
+                inpMxSelected.value = matrix.name;
+                btnSaveValues.classList.remove('hidden');
+                btnSaveMatrix.classList.add('hidden');
+                [...document.querySelectorAll('.cell')]
+                    .forEach(inp => inp.removeAttribute('readonly'))
+            }
         } else {
+            this.mxVisible = null;
             this.elm.classList.add('hidden');
             inpMxSelected.value = '';
             lblDisMx.innerText = "Seleccione una matriz";
@@ -216,6 +244,14 @@ const selectItemOperation = e => {
     }
 
     listMx.appendChild(li);
+}
+
+function changeSelectOperations(){
+    if(selectListOperations.value < 0) { // selectListOperations.value : { -1, 'sum', etc.}
+        btnOperations.classList.add('hidden');
+        lblOperations.innerText = '';
+    }
+    else btnOperations.classList.remove('hidden')
 }
 
 const changeCells = () => {
@@ -292,7 +328,7 @@ const loadList = () => {
         // listas de operacion
         option = document.createElement('option');
             option.value = index;
-            option.innerText = mx.name;
+            option.innerText = `${mx.name}(${mx.rows}x${mx.columns})`;
             selectListMxsOperations.appendChild(option);
     });
 
@@ -318,9 +354,26 @@ btnSaveValues.addEventListener('click', () => {
 
     btnSaveValues.disabled = true;
     btnSaveValues.classList.add('control__button-desactivated');
-})
+});
 
-// Borrar
+// Guardar Matriz Resultante
+btnSaveMatrix.addEventListener('click', () => {
+    // desactivar todo
+    document.querySelector('#div-operations').classList.add('hidden');
+    document.querySelector('#div-operationsUnary').classList.add('hidden');
+    divListMatrices.classList.add('hidden');
+
+    // preparar guardar matriz
+    lblSave.innerText = '';
+    inpRows.value = mxDisMx.mxVisible.rows;
+    inpRows.setAttribute('readonly', true);
+    inpColumns.value = mxDisMx.mxVisible.columns;
+    inpColumns.setAttribute('readonly', true);
+    inpName.focus();
+    saveResult = true;
+});
+
+// Borrar Matriz
 const deleteMxOnList = e => {
     Matrix.delete(e.target.id);
     loadList();
@@ -332,7 +385,7 @@ const deleteMxOnList = e => {
     e.stopPropagation();
 }
 
-// Agregar
+// Guardar Matriz
 btnSave.addEventListener('click', () => {
     const rows = parseInt(inpRows.value);
     const columns = parseInt(inpColumns.value);
@@ -346,7 +399,18 @@ btnSave.addEventListener('click', () => {
     }
     else lblSave.innerHTML = "";
 
-    const mx = new Matrix(rows, columns, name);
+    let mx = null;
+    if(saveResult){
+        mx = new Matrix(rows, columns, name, mxDisMx.mxVisible.mx);
+        document.querySelector('#div-operations').classList.remove('hidden');
+        document.querySelector('#div-operationsUnary').classList.remove('hidden');
+        divListMatrices.classList.remove('hidden');
+        inpColumns.removeAttribute('readonly');
+        inpRows.removeAttribute('readonly');
+        saveResult = false;
+    } else {
+        mx = new Matrix(rows, columns, name);
+    }
 
     Matrix.add(mx);
     loadList();
@@ -354,12 +418,7 @@ btnSave.addEventListener('click', () => {
 })
 
 selectListMxsOperations.addEventListener('change', selectItemOperation);
-selectListOperations.addEventListener('change', () => {
-    const { value } = selectListOperations.options[selectListOperations.selectedIndex];
-
-    if(value < 0) btnOperations.classList.add('hidden')
-    else btnOperations.classList.remove('hidden')
-});
+selectListOperations.addEventListener('change', changeSelectOperations);
 
 btnOperations.addEventListener('click', () => {
     const mxs = [...ulListMxSelectedOperations.children]
@@ -395,7 +454,7 @@ btnOperations.addEventListener('click', () => {
         mxDisMx.visible(false);
     }
 
-    mxDisMx.visible(mxResult);
+    mxDisMx.visible(mxResult, true);
 })
 
 //#endregion

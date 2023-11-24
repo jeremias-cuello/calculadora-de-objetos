@@ -137,16 +137,16 @@ body{
     background-color: #3ca4ff;
 }
 
-.celda{
+.cell{
     background: #81c4ff;
     outline: none;
 }
 
-.celda::-webkit-inner-spin-button {
+.cell::-webkit-inner-spin-button {
 	-webkit-appearance: none;
 }
 
-.celda:focus {
+.cell:focus {
 	outline: none;
 	border-color: blue;
 	box-shadow: blue 0px 0px 5px;
@@ -198,7 +198,7 @@ body{
     gap: 10px 40px;
 }
 
-.celda{
+.cell{
     border: solid black 1px;
     border-radius: 5px;
     text-align: center;
