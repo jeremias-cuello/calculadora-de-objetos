@@ -23,7 +23,11 @@ const autoLoadMxs = () => {
         [2, 2, 'MxD'],
         [4, 4, 'MxE'],
         [7, 3, 'MxF'],
-        [3, 3, 'MxG'],
+        [3, 3, 'MxG', [
+            [5, 7, 6],
+            [6, 4, 8],
+            [1, 3, 6]
+        ]],
         [5, 5, 'MxH'],
         [7, 7, 'MxI'],
         [10, 10, 'MxJ'],
@@ -103,7 +107,7 @@ const autoOperarMxs = (indexs, operation) => {
 
 // autoCompletar valores para hagilizar desarrollo
 document.addEventListener('DOMContentLoaded', () => {
-    // autoLoadMxs();
+    autoLoadMxs();
     // autoOperarMxs([1, 10], 'subtract');
     // autoOperarMxs([12, 13, 14, 15], 'multiply');
 })
@@ -438,6 +442,10 @@ const loadControls = operation => {
         {
             operation: 'scalarMultiplication',
             HTML: '<input class="control__input" type="number" id="scalar" placeholder="Inrgese Escalar">'
+        },
+        {
+            operation: 'determinant',
+            HTML: '<label class="control__label" for="determinantResult" id="lblDeterminantResult">Determinante</label><input class="control__input" type="number" id="determinantResult" readonly>'
         }
     ];
 
@@ -471,7 +479,10 @@ btnOperationsUnary.addEventListener('click', () => {
     try {
         switch (operation) {
             case 'determinant':
-
+                const inpResult = document.querySelector('#determinantResult');
+                const lblDeterminantResult = document.querySelector('#lblDeterminantResult');
+                inpResult.value = mxSelected.determinant;
+                lblDeterminantResult.innerText = `Determinante de ${mxSelected.name}`;
                 break;
             case 'transpose':
                 mxResult = mxSelected.transpose;
