@@ -15,7 +15,7 @@ Cualquiera que desee colaborar en este repo es bienvenido. El entorno de desarro
     - [ ] Multiplicación entre escalar y Matriz
     - [ ] Traspuesta
     - [ ] Matriz Inversa
-    - [ ] Boton "Agregar" para guardar resultados que son una matriz a la lista.
+    - [x] Boton "Agregar" para guardar resultados que son una matriz a la lista.
 
 ## Próximamente
 
