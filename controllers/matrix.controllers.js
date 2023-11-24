@@ -103,9 +103,9 @@ const autoOperarMxs = (indexs, operation) => {
 
 // autoCompletar valores para hagilizar desarrollo
 document.addEventListener('DOMContentLoaded', () => {
-    autoLoadMxs();
-    autoOperarMxs([1, 10], 'subtract');
-    autoOperarMxs([12, 13, 14, 15], 'multiply');
+    // autoLoadMxs();
+    // autoOperarMxs([1, 10], 'subtract');
+    // autoOperarMxs([12, 13, 14, 15], 'multiply');
 })
 
 //#endregion
@@ -192,9 +192,10 @@ const btnOperations = document.querySelector('#btnOperations');
 const lblOperations = document.querySelector('#lblOperations');
 
 // Operaciones Unarias
-const selectListOperationsUnary = document.querySelector('#listOperations');
+const selectListOperationsUnary = document.querySelector('#listOperationsUnary');
 const inpMxSelected = document.querySelector('#mxSelectedOpertaionsUnary');
 const btnOperationsUnary = document.querySelector('#btnOperationsUnary');
+const lblOperationsUnary = document.querySelector('#lblOperationsUnary');
 
 //#endregion
 
@@ -423,6 +424,76 @@ btnSave.addEventListener('click', () => {
 
 selectListMxsOperations.addEventListener('change', selectItemOperation);
 selectListOperations.addEventListener('change', changeSelectOperations);
+selectListOperationsUnary.addEventListener('change', () => {
+    const option = selectListOperationsUnary.value;
+
+    if(option < 1) btnOperationsUnary.classList.add('hidden');
+    else btnOperationsUnary.classList.remove('hidden');
+
+    loadControls(option);
+})
+
+const loadControls = operation => {
+    const controls = [
+        {
+            operation: 'scalarMultiplication',
+            HTML: '<input class="control__input" type="number" id="scalar" placeholder="Inrgese Escalar">'
+        }
+    ];
+
+    let finded = false;
+    for (let i = 0; i < controls.length; i++) {
+        if(controls[i].operation === operation){
+            document.querySelector('.controls').innerHTML = controls[i].HTML;
+            finded = true;
+            break;
+        }
+    }
+
+    if(!finded) document.querySelector('.controls').innerHTML = '';
+}
+
+btnOperationsUnary.addEventListener('click', () => {
+    if(!selectedMx) {
+        lblOperationsUnary.innerText = 'No hay matriz seleccionada';
+        return;
+    }
+    else {
+        lblOperationsUnary.innerText = '';
+        selectedMx.classList.remove('listMxs__item-selected');
+        selectedMx = false;
+        inpMxSelected.value = '';
+    }
+
+    const operation = selectListOperationsUnary.value;
+    let mxResult = false;
+    const mxSelected = mxDisMx.mxVisible;
+    try {
+        switch (operation) {
+            case 'determinant':
+
+                break;
+            case 'transpose':
+                mxResult = mxSelected.transpose;
+                break;
+            case 'inverse':
+
+                break;
+            case 'scalarMultiplication':
+                const scalar = document.querySelector('#scalar');
+                if(scalar.value.trim() !== ''){
+                    mxResult = mxSelected.scalarMultiplication(parseFloat(scalar.value));
+                } else lblOperationsUnary.innerText = 'Escalar no es un numero';
+                scalar.value = '';
+                break;
+        }
+    } catch (err) {
+        lblOperationsUnary.innerText = err;
+    }
+
+    mxDisMx.visible(mxResult, true);
+
+})
 
 btnOperations.addEventListener('click', () => {
     const mxs = [...ulListMxSelectedOperations.children]
