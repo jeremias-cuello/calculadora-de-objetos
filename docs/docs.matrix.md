@@ -90,7 +90,7 @@ Cuando actua SubMx dá la posibilidad que la matriz sea de 2x2 facilitando el ca
 ## determinant
 
 - [x] developed
-- [ ] tested
+- [x] tested
 
 El cálculo del determinante es aplicable a matrices cuadradas.
 
@@ -217,8 +217,8 @@ Devuelve la matriz adjunta. Es la traspuesta de la matriz de cofactores.
 
 ## inverseMx
 
-- [ ] developed
-- [ ] tested
+- [x] developed
+- [x] tested
 
 La matriz inversa se obtiene solo con matrices cuadradas y no todas las tienen. Símbolo: MxA^(-1) es una matriz tal que cumple
 
