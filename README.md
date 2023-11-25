@@ -8,13 +8,13 @@ Cualquiera que desee colaborar en este repo es bienvenido. El entorno de desarro
 1. Release 1.0.0: Calculadora de objetos con:
 
     Matriz
-    - [ ] Determinante
+    - [x] Determinante
     - [x] Suma Matricial
     - [x] Resta Matricial
     - [x] Multiplicación Matricial
     - [x] Multiplicación entre escalar y Matriz
     - [x] Traspuesta
-    - [ ] Matriz Inversa
+    - [x] Matriz Inversa
     - [x] Boton "Agregar" para guardar resultados que son una matriz a la lista.
 
 ## Próximamente
