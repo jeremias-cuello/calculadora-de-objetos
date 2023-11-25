@@ -149,6 +149,15 @@ class Matrix{
         return mxResult;
     }
 
+    get inverseMx(){
+        const determinant = this.determinant;
+        if(determinant === 0){
+            throw 'La matriz no es inversible.';
+        }
+
+        return this.adjoinMx.scalarMultiplication(1 / determinant);
+    }
+
     /**
      * @param  {...Matrix} mxs Arreglo de Matrix
      * @returns Matriz suma

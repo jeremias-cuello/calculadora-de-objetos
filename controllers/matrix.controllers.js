@@ -488,7 +488,7 @@ btnOperationsUnary.addEventListener('click', () => {
                 mxResult = mxSelected.transpose;
                 break;
             case 'inverse':
-
+                mxResult = mxSelected.inverseMx;
                 break;
             case 'scalarMultiplication':
                 const scalar = document.querySelector('#scalar');
