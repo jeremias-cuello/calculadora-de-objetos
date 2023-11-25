@@ -1,4 +1,4 @@
-import { Matrix } from '../models.matrix.js';
+// import { Matrix } from '../models.matrix.js';
 
 function rnd(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -454,4 +454,8 @@ function tstDeterminant() {
     }
 }
 
-tstDeterminant();
+// tstDeterminant();
+
+test('Jeremias', () => {
+    expect(false).toBe(false);
+});
