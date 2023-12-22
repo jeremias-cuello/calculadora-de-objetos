@@ -339,6 +339,9 @@ btnOperations.addEventListener('click', () => {
 
         lblOperations.innerHTML = '';
     } catch (err) {
+        btnSaveValues.classList.remove('hidden');
+        btnSaveMatrix.classList.add('hidden');
+        saveResult = false;
         lblOperations.innerHTML = err;
         mxDisMx.visible(false);
     }
