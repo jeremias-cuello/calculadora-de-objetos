@@ -164,6 +164,7 @@ const selectMxInList = e => {
     const index = selectedMx.id.replace('mxList', '');
     const mx = Matrix.list[index];
     mxDisMx.visible(mx);
+    document.querySelector('.cell').focus();
 }
 
 const isValidated = (rows, columns, name) => {
