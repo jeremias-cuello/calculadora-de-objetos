@@ -92,6 +92,16 @@ const lblOperationsUnary = document.querySelector('#lblOperationsUnary');
 
 //#region UI Functions
 
+const resetControlsOperationUnary = () => {
+    selectListOperationsUnary.value = "-1";
+    selectListOperationsUnary.dispatchEvent(new Event("change"));
+}
+
+const resetControlsOperation = () => {
+    selectListOperations.value = "-1";
+    selectListOperations.dispatchEvent(new Event("change"));
+}
+
 const removeMxListOperation = e => {
     const index = e.target.id.replace('quitMxSelected', '');
     const li = e.target.parentNode;
@@ -165,7 +175,10 @@ const selectMxInList = e => {
     const mx = Matrix.list[index];
     mxDisMx.visible(mx);
     document.querySelector('.cell').focus();
-}
+
+    resetControlsOperation();
+    resetControlsOperationUnary();
+} 
 
 const isValidated = (rows, columns, name) => {
     const regExpName = /^[a-zA-Z]+$/;
@@ -227,6 +240,9 @@ const loadList = () => {
 
     selectedMx = false;
     mxDisMx.visible(false);
+
+    resetControlsOperation();
+    resetControlsOperationUnary();
 }
 
 selectListMxsOperations.addEventListener('change', selectItemOperation);
@@ -395,6 +411,8 @@ const deleteMxOnList = e => {
         lblDisMx.innerHTML = "Debes crear una matriz";
     }
 
+    resetControlsOperation();
+    resetControlsOperationUnary();
     e.stopPropagation();
 }
 
