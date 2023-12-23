@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Matriz</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <header class="header">
+        <h1 class="header__title">Matriz</h1>
+    </header>
+    <div class="accions">
+        <div class="group" id="div-saveMatrix">
+            <h2 class="group__title">Matriz</h2>
+            <div class="control">
+                <input class="control__input" id="inpName"  placeholder="Nombre (MxA, mtzDet)" type="text" autofocus>
+                <span>
+                    <input class="control__input" id="inpRows" placeholder="Filas" type="number" min="1">
+                    <input class="control__input" id="inpColumns" placeholder="Columnas" type="number" min="1">
+                </span>
+                <label class="control__label" id="lblSave" for="inpName"></label>
+                <button class="control__button" id="btnSave" type="button">Guardar</button>
+            </div>
+        </div>
+        <div class="group" id="div-operations">
+            <h2 class="group__title">Operaciones</h2>
+            <div class="control">
+                <select class="control__select" id="listOperations">
+                    <option value="-1" selected>Seleccione Operaciones</option>
+                    <option value="sum">Suma</option>
+                    <option value="subtract">Resta</option>
+                    <option value="multiply">Multiplicación Matricial</option>
+                </select>
+                <select class="control__select" id="listMxsOperations">
+                    <option value="-1" selected>Seleccione Matrices</option>
+                </select>
+                <ul class="listMxsOperation hidden" id="listMxSelectedOperations">
+                </ul>
+                <label class="control__label" id="lblOperations" for="listOperations"></label>
+                <button class="control__button hidden" id="btnOperations" type="button">Calcular</button>
+            </div>
+        </div>
+        <div class="group" id="div-operationsUnary">
+            <h2 class="group__title">Operaciones Unarias</h2>
+            <div class="control">
+                <select class="control__select" id="listOperationsUnary">
+                    <option value="-1" selected>Seleccione Operaciones</option>
+                    <option value="determinant">Determinante</option>
+                    <option value="scalarMultiplication">Multiplicación Escalar</option>
+                    <option value="inverse">Matriz Inversa</option>
+                    <option value="transpose">Trasponer</option>
+                </select>
+                <label class="control__label" for="mxSelectedOpertaionsUnary">Matriz Seleccionada</label>
+                <input class="control__input" id ="mxSelectedOpertaionsUnary" type="text" placeholder="No hay Matriz Seleccionada" readonly>
+                <label class="control__label" id="lblOperationsUnary" for="listOperationsUnary"></label>
+                <div class="controls"></div>
+                <button class="control__button hidden" id="btnOperationsUnary" type="button">Calcular</button>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="contrlMxs">
+            <button class="control__button control__button-desactivated" id="saveValues" disabled="0">Guardar Valores</button>
+            <button class="control__button control__button-activated hidden" id="saveMatrix">Guardar Matriz</button>
+            <div class="listMxs">
+            </div>
+        </div>
+        <div class="displayMx">
+            <h2 class="displayMx__title" id="lblDisplayMx">Debes crear una matriz</h2>
+            <div class="matrix hidden" id="vlvDisplayMx">
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <strong>Copyright 2023 | Objetos | Arquitectura MVC</strong>
+        <strong style="filter: blur(.3mm);"> arr.join(' | ')</strong>
+        <strong style="filter: blur(.6mm);"> const arr = ['Copyright 2023', 'Objetos', 'Arquitectura MVC']</strong>
+    </footer>
+</body>
+</html>
+<script type="module" src="../../controllers/matrix.controllers.js"></script>
